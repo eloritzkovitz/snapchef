@@ -252,7 +252,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                         ),
                       ],
                     ),
-                    const SizedBox(width: 36),
+                    const SizedBox(width: 20),
                     GestureDetector(
                       onTap:
                           widget.friendsClickable ? widget.onFriendsTap : null,
