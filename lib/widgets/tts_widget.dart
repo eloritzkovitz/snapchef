@@ -108,6 +108,45 @@ class TTSWidgetState extends State<TTSWidget> {
     }
   }
 
+  /// Speaks all lines of text in sequence.
+  Future<void> _playAll() async {
+    await TTSWidget._flutterTts.stop();
+    if (_lines.isEmpty) {
+      _lines = preprocessForTTS(widget.text);
+    }
+    await TTSWidget._flutterTts.awaitSpeakCompletion(true);
+    setState(() {
+      _isPlaying = true;
+      _currentLine = 0;
+    });
+
+    for (int i = _currentLine; i < _lines.length; i++) {
+      if (!mounted || !_isPlaying) break;
+      final line = _lines[i].trim();
+      if (line.isNotEmpty) {
+        bool finished = false;
+        TTSWidget._flutterTts.setCompletionHandler(() {
+          finished = true;
+        });
+        await TTSWidget._flutterTts.speak(line);
+        // Wait until TTS finishes speaking the line
+        while (!finished && mounted && _isPlaying) {
+          await Future.delayed(const Duration(milliseconds: 100));
+        }
+      }
+      if (mounted) {
+        setState(() {
+          _currentLine = i;
+        });
+      }
+    }
+    if (mounted) {
+      setState(() {
+        _isPlaying = false;
+      });
+    }
+  }
+
   @override
   void dispose() {
     TTSWidget._flutterTts.stop();
@@ -123,11 +162,25 @@ class TTSWidgetState extends State<TTSWidget> {
       activeIcon: Icons.close,
       children: [
         SpeedDialChild(
-          child: const Icon(Icons.skip_previous, color: Colors.white),
-          backgroundColor:
-              _currentLine > 0 ? primarySwatch[200] : Colors.grey.shade400,
-          label: 'Previous',
-          onTap: _currentLine > 0 ? _previousLine : null,
+          child: const Icon(Icons.queue_music, color: Colors.white),
+          backgroundColor: primarySwatch[300],
+          label: 'Play All',
+          onTap: _playAll,
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.play_arrow, color: Colors.white),
+          backgroundColor: primarySwatch[300],
+          label: 'Play',
+          onTap: _play,
+        ),
+        SpeedDialChild(
+          child: Icon(
+            _isPlaying ? Icons.pause : Icons.stop,
+            color: Colors.white,
+          ),
+          backgroundColor: primarySwatch[300],
+          label: _isPlaying ? 'Pause' : 'Stop',
+          onTap: _isPlaying ? _pauseText : _stopText,
         ),
         SpeedDialChild(
           child: const Icon(Icons.skip_next, color: Colors.white),
@@ -138,22 +191,11 @@ class TTSWidgetState extends State<TTSWidget> {
           onTap: _currentLine < _lines.length - 1 ? _nextLine : null,
         ),
         SpeedDialChild(
-          child: const Icon(Icons.play_arrow, color: Colors.white),
-          backgroundColor: primarySwatch[400],
-          label: 'Play',
-          onTap: _play,
-        ),
-        SpeedDialChild(
-          child: const Icon(Icons.pause, color: Colors.white),
-          backgroundColor: primarySwatch[500],
-          label: 'Pause',
-          onTap: _pauseText,
-        ),
-        SpeedDialChild(
-          child: const Icon(Icons.stop, color: Colors.white),
-          backgroundColor: primarySwatch[600],
-          label: 'Stop',
-          onTap: _stopText,
+          child: const Icon(Icons.skip_previous, color: Colors.white),
+          backgroundColor:
+              _currentLine > 0 ? primarySwatch[300] : Colors.grey.shade400,
+          label: 'Previous',
+          onTap: _currentLine > 0 ? _previousLine : null,
         ),
       ],
     );
