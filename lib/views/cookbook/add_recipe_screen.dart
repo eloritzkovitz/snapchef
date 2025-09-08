@@ -212,7 +212,7 @@ class _AddManualRecipeScreenState extends State<AddRecipeScreen> {
                               children: [
                                 Expanded(
                                   child: DropdownButtonFormField<String>(
-                                    value: _selectedMealType,
+                                    initialValue: _selectedMealType,
                                     decoration: InputDecoration(
                                       labelText: 'Meal Type',
                                       labelStyle:
@@ -247,7 +247,7 @@ class _AddManualRecipeScreenState extends State<AddRecipeScreen> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: DropdownButtonFormField<String>(
-                                    value: _selectedCuisine,
+                                    initialValue: _selectedCuisine,
                                     decoration: InputDecoration(
                                       labelText: 'Cuisine',
                                       labelStyle:
@@ -286,7 +286,7 @@ class _AddManualRecipeScreenState extends State<AddRecipeScreen> {
                               children: [
                                 Expanded(
                                   child: DropdownButtonFormField<String>(
-                                    value: _selectedDifficulty,
+                                    initialValue: _selectedDifficulty,
                                     decoration: InputDecoration(
                                       labelText: 'Difficulty',
                                       labelStyle:

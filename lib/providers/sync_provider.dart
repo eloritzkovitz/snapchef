@@ -16,6 +16,9 @@ class SyncProvider extends ChangeNotifier {
   /// Map of action queue names to their pending actions.
   final Map<String, List<Map<String, dynamic>>> pendingActionQueues = {};
 
+  bool _syncInProgress = false; // Indicates if a sync operation is in progress
+  final List<Future<void> Function()> _syncQueue = [];
+
   // Get sync actions
   FridgeSyncActions get fridgeSyncActions => getIt<FridgeSyncActions>();
   GrocerySyncActions get grocerySyncActions => getIt<GrocerySyncActions>();
@@ -57,12 +60,16 @@ class SyncProvider extends ChangeNotifier {
   }
 
   /// Adds an action to a specific queue.
-  void addPendingAction(String queue, Map<String, dynamic> action) {
+  void addPendingAction(String queue, Map<String, dynamic> action) {    
     pendingActionQueues.putIfAbsent(queue, () => []);
     pendingActionQueues[queue]!.add(action);
     savePendingActions();
     log('Action added to $queue: $action');
     notifyListeners();
+    // Optionally, trigger sync if online
+    if (_syncConnectivityProvider != null && !_syncConnectivityProvider!.isOffline) {
+      syncPendingActions();
+    }
   }
 
   /// Clears the pending actions queue.
@@ -96,24 +103,38 @@ class SyncProvider extends ChangeNotifier {
     }
   }
 
-  /// Syncs all pending actions in all queues.
+  /// Serializes sync requests using a queue.
   Future<void> syncPendingActions() async {
-    for (final queue in pendingActionQueues.keys) {
-      final actions = pendingActionQueues[queue];
-      if (actions != null && actions.isNotEmpty) {
-        for (final action in List<Map<String, dynamic>>.from(actions)) {
-          try {
-            await handleSyncAction(queue, action);
-            actions.remove(action);
-          } catch (e) {
-            log('Failed to sync action in $queue: $e');
-            break;
+    // Add the sync task to the queue
+    _syncQueue.add(() async {
+      if (_syncInProgress) return;
+      _syncInProgress = true;
+      for (final queue in pendingActionQueues.keys) {
+        final actions = pendingActionQueues[queue];
+        if (actions != null && actions.isNotEmpty) {
+          for (final action in List<Map<String, dynamic>>.from(actions)) {
+            try {
+              await handleSyncAction(queue, action);
+              actions.remove(action);
+            } catch (e) {
+              log('Failed to sync action in $queue: $e');
+              break;
+            }
           }
         }
       }
+      await savePendingActions();
+      notifyListeners();
+      _syncInProgress = false;
+    });
+
+    // If not already processing, start processing the queue
+    if (!_syncInProgress) {
+      while (_syncQueue.isNotEmpty) {
+        final task = _syncQueue.removeAt(0);
+        await task();
+      }
     }
-    savePendingActions();
-    notifyListeners();
   }
 
   /// Saves pending actions to shared preferences.

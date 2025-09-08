@@ -62,7 +62,7 @@ class _EditNotificationPreferencesScreenState
               SwitchListTile(
                 title: const Text('Friend Requests'),
                 value: _friendRequests,
-                activeColor: primaryColor,
+                activeThumbColor: primaryColor,
                 onChanged: (val) {
                   setState(() => _friendRequests = val);
                 },
@@ -70,7 +70,7 @@ class _EditNotificationPreferencesScreenState
               SwitchListTile(
                 title: const Text('Recipe Shares'),
                 value: _recipeShares,
-                activeColor: primaryColor,
+                activeThumbColor: primaryColor,
                 onChanged: (val) {
                   setState(() => _recipeShares = val);
                 },

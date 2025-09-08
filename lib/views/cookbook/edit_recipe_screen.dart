@@ -193,7 +193,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                               children: [
                                 Expanded(
                                   child: DropdownButtonFormField<String>(
-                                    value: _selectedMealType,
+                                    initialValue: _selectedMealType,
                                     decoration: InputDecoration(
                                       labelText: 'Meal Type',
                                       labelStyle: const TextStyle(color: Colors.grey),
@@ -224,7 +224,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: DropdownButtonFormField<String>(
-                                    value: _selectedCuisine,
+                                    initialValue: _selectedCuisine,
                                     decoration: InputDecoration(
                                       labelText: 'Cuisine',
                                       labelStyle: const TextStyle(color: Colors.grey),
@@ -259,7 +259,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                               children: [
                                 Expanded(
                                   child: DropdownButtonFormField<String>(
-                                    value: _selectedDifficulty,
+                                    initialValue: _selectedDifficulty,
                                     decoration: InputDecoration(
                                       labelText: 'Difficulty',
                                       labelStyle: const TextStyle(color: Colors.grey),

@@ -55,7 +55,7 @@ class _FilterSortSheetState extends State<FridgeFilterSortSheet> {
           children: [
             // Category filter
             DropdownButtonFormField<String>(
-              value:
+              initialValue:
                   categories.contains(selectedCategory) ? selectedCategory : '',
               decoration: InputDecoration(
                 labelText: widget.categoryLabel,
@@ -79,7 +79,7 @@ class _FilterSortSheetState extends State<FridgeFilterSortSheet> {
             const SizedBox(height: 18),
             // Sort
             DropdownButtonFormField<String>(
-              value: selectedSort,
+              initialValue: selectedSort,
               decoration: InputDecoration(
                 labelText: widget.sortLabel,
                 prefixIcon: Icon(Icons.sort, color: primaryColor),

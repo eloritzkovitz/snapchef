@@ -63,7 +63,7 @@ class _CookbookFilterSortSheetState extends State<CookbookFilterSortSheet> {
           children: [
             // Meal Type
             DropdownButtonFormField<String>(
-              value:
+              initialValue:
                   categories.contains(selectedCategory) ? selectedCategory : '',
               decoration: InputDecoration(
                 labelText: 'Meal Type',
@@ -86,7 +86,7 @@ class _CookbookFilterSortSheetState extends State<CookbookFilterSortSheet> {
             SizedBox(height: 12),
             // Cuisine
             DropdownButtonFormField<String>(
-              value: cuisines.contains(selectedCuisine) ? selectedCuisine : '',
+              initialValue: cuisines.contains(selectedCuisine) ? selectedCuisine : '',
               decoration: InputDecoration(
                 labelText: 'Cuisine',
                 prefixIcon: Icon(Icons.room_service, color: primaryColor),
@@ -108,7 +108,7 @@ class _CookbookFilterSortSheetState extends State<CookbookFilterSortSheet> {
             SizedBox(height: 12),
             // Difficulty
             DropdownButtonFormField<String>(
-              value: difficulties.contains(selectedDifficulty)
+              initialValue: difficulties.contains(selectedDifficulty)
                   ? selectedDifficulty
                   : '',
               decoration: InputDecoration(
@@ -133,7 +133,7 @@ class _CookbookFilterSortSheetState extends State<CookbookFilterSortSheet> {
             SizedBox(height: 18),
             // Source filter
             DropdownButtonFormField<String>(
-              value: selectedSource,
+              initialValue: selectedSource,
               decoration: InputDecoration(
                 labelText: 'Source',
                 prefixIcon: Icon(Icons.source, color: primaryColor),
@@ -217,7 +217,7 @@ class _CookbookFilterSortSheetState extends State<CookbookFilterSortSheet> {
             SizedBox(height: 12),
             // Sort
             DropdownButtonFormField<String>(
-              value: selectedSort,
+              initialValue: selectedSort,
               decoration: InputDecoration(
                 labelText: 'Sort By',
                 prefixIcon: Icon(Icons.sort, color: primaryColor),
