@@ -27,3 +27,8 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+// Disable Kotlin incremental compilation to avoid potential issues with build caching
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions.incremental = false
+}

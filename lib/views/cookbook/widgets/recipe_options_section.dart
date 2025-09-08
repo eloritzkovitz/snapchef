@@ -33,7 +33,7 @@ class RecipeOptionsSection extends StatelessWidget {
             labelText: 'Meal Type',
             border: OutlineInputBorder(),
           ),
-          value: selectedMealType,
+          initialValue: selectedMealType,
           items: mealTypes
               .map((type) => DropdownMenuItem(
                     value: type,
@@ -48,7 +48,7 @@ class RecipeOptionsSection extends StatelessWidget {
             labelText: 'Cuisine',
             border: OutlineInputBorder(),
           ),
-          value: selectedCuisine,
+          initialValue: selectedCuisine,
           items: cuisines
               .map((cuisine) => DropdownMenuItem(
                     value: cuisine,
@@ -63,7 +63,7 @@ class RecipeOptionsSection extends StatelessWidget {
             labelText: 'Difficulty',
             border: OutlineInputBorder(),
           ),
-          value: selectedDifficulty,
+          initialValue: selectedDifficulty,
           items: difficulties
               .map((difficulty) => DropdownMenuItem(
                     value: difficulty,
